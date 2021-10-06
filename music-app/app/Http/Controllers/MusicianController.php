@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Musician;
 use Illuminate\Http\Request;
 
 class MusicianController extends Controller
@@ -13,7 +14,8 @@ class MusicianController extends Controller
      */
     public function index()
     {
-        //
+        $musicians = \App\Musician::all();
+        return view('musicians.index', ['musicians'=> $musicians]);
     }
 
     /**
