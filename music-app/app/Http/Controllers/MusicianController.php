@@ -25,7 +25,8 @@ class MusicianController extends Controller
      */
     public function create()
     {
-        //
+        $musician = new \App\Musician;
+        return view('musicians.create', ['musician' => $musician]);
     }
 
     /**
@@ -36,7 +37,8 @@ class MusicianController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        \App\Musician::create($this->validatedData($request));
+        return redirect()->route('musicians.index')->with('success', 'Musician was created successfully');
     }
 
     /**
@@ -47,7 +49,8 @@ class MusicianController extends Controller
      */
     public function show($id)
     {
-        //
+        $musician = \App\Musician::findOrFail($id);
+        return view('musicians.show', ['musician' => $musician]);
     }
 
     /**
@@ -58,7 +61,8 @@ class MusicianController extends Controller
      */
     public function edit($id)
     {
-        //
+        $musician = \App\Musician::findOrFail($id);
+        return view('musicians.edit', ['musician'=> $musician]);
     }
 
     /**
@@ -70,7 +74,8 @@ class MusicianController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        \App\Musician::findOrFail($id)->update($this->validatedData($request));
+        return redirect()->route('musicians.index')->with('success', 'Musician was updated successfully');
     }
 
     /**
@@ -81,6 +86,18 @@ class MusicianController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $musician = \App\Musician::findOrFail($id);
+        $musician->delete();
+        
+        return redirect()->route('musicians.index')->with('success', 'Musician was deleted');
     }
-}
+
+    private function validatedData($request) {
+        return $request->validate([
+            'first_name' => 'required|alpha',
+            'last_name' => 'required|alpha',
+            'instrument' => 'required|alpha',
+            'website' => 'required'
+        ]);
+    }
+} //end of class
