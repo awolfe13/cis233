@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Musician;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 
 class MusicianController extends Controller
 {
@@ -14,7 +15,7 @@ class MusicianController extends Controller
      */
     public function index()
     {
-        $musicians = \App\Musician::all();
+        $musicians = \App\Musician::paginate(10);
         return view('musicians.index', ['musicians'=> $musicians]);
     }
 
@@ -99,5 +100,9 @@ class MusicianController extends Controller
             'instrument' => 'required|alpha',
             'website' => 'required'
         ]);
+    }
+
+    public function boot() {
+        Paginator::useBootstrap();
     }
 } //end of class

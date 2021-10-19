@@ -36,4 +36,5 @@
         @endforeach
     </tbody>
 </table>
+{{$musicians->links('pagination::bootstrap-4')}}
 @endsection
