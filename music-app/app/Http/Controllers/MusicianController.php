@@ -6,6 +6,12 @@ use App\Musician;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Collections\sortBy;
+use Illuminate\Support\Collection;
+
+
 class MusicianController extends Controller
 {
     /**
@@ -13,11 +19,26 @@ class MusicianController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $sortBy = $request->query('sortBy');
+        $dir = $request->query('direction');
+        $asc = 'asc';
+        $direction = '';
+
+        if($dir == $asc) {
+            $direction = 'desc';
+        } else {
+            $direction = 'asc';
+        }
         
-        $musicians = \App\Musician::paginate(10);
-        return view('musicians.index', ['musicians'=> $musicians]);
+        $musicians = \App\Musician::orderBy($sortBy, $direction)->paginate(10);
+        
+        // $musicians = \App\Musician::paginate(10);
+        // $musicianCollection = collect($musicians);
+        // $sortedMusicians = $musicianCollection->sortBy($sortBy, $dir);
+        
+        return view('musicians.index', ['musicians'=> $musicians, 'direction' => $direction]);
     }
 
     /**
@@ -107,11 +128,4 @@ class MusicianController extends Controller
         Paginator::useBootstrap();
     }
 
-    function sortColumnsBy($column) {
-        $dir = (Input::get('direction') == 'asc') ? 'desc' : 'asc';
-        return route('musicians.index', [
-            'sortBy' => $column,
-            'direction' => $dir
-        ]);
-    }
 } //end of class
