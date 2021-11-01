@@ -2,15 +2,16 @@
 
 @section('content')
 <h1>Musicians</h1>
+<p>PAGE: {{$url}}</p>
 <a class="btn btn-primary" href="{{ route('musicians.create')}}">New Musician</a>
 <table class="table table-striped table-hover">
     <thead>
         <tr>
-            <th><a href="{{route('musicians.index', ['sortBy' => 'first_name', 'direction' => '{{$direction}}'])}}">First Name</a>
+            <th><a href="{{route('musicians.index', ['sortBy' => 'first_name', 'order' => 'asc'])}}">First Name</a>
             </th>
-            <th><a href="{{route('musicians.index', ['sortBy' => 'last_name', 'direction' => 'asc'])}}">Last Name</a>
+            <th><a href="{{route('musicians.index', ['sortBy' => 'last_name', 'order' => 'asc'])}}">Last Name</a>
             </th>
-            <th><a href="{{route('musicians.index', ['sortBy' => 'instrument', 'direction' => 'asc'])}}">Instrument</a></th>
+            <th><a href="{{route('musicians.index', ['sortBy' => 'instrument', 'order' => 'desc'])}}">Instrument</a></th>
             <th>Website</th>
             <th>Details</th>
             <th>Edit</th>
@@ -38,5 +39,9 @@
         @endforeach
     </tbody>
 </table>
-{{$musicians->links('pagination::bootstrap-4')}}
+{{-- {{$musicians->links('pagination::bootstrap-4')}} --}}
+{{-- {{$musicians->appends(Request::query())->render()}} --}}
+{{$musicians->withQueryString()->links()}}
+
 @endsection
+

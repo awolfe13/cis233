@@ -22,23 +22,21 @@ class MusicianController extends Controller
     public function index(Request $request)
     {
         $sortBy = $request->query('sortBy');
-        $dir = $request->query('direction');
-        $asc = 'asc';
-        $direction = '';
-
-        if($dir == $asc) {
-            $direction = 'desc';
+        $order = $request->query('order');
+        $url = \Request::fullUrl();
+        
+        
+        if ($sortBy && $order) {
+            $musicians = \App\Musician::orderBy($sortBy, $order)->paginate(10)->withQueryString();
+            
+            
+        
         } else {
-            $direction = 'asc';
+            $musicians = \App\Musician::paginate(10);
+             return view('musicians.index', ['musicians' => $musicians]);
         }
-        
-        $musicians = \App\Musician::orderBy($sortBy, $direction)->paginate(10);
-        
-        // $musicians = \App\Musician::paginate(10);
-        // $musicianCollection = collect($musicians);
-        // $sortedMusicians = $musicianCollection->sortBy($sortBy, $dir);
-        
-        return view('musicians.index', ['musicians'=> $musicians, 'direction' => $direction]);
+         
+        return view('musicians.index', ['musicians' => $musicians, 'url' => $url]);
     }
 
     /**
