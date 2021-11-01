@@ -15,6 +15,7 @@ class MusicianController extends Controller
      */
     public function index()
     {
+        
         $musicians = \App\Musician::paginate(10);
         return view('musicians.index', ['musicians'=> $musicians]);
     }
@@ -104,5 +105,13 @@ class MusicianController extends Controller
 
     public function boot() {
         Paginator::useBootstrap();
+    }
+
+    function sortColumnsBy($column) {
+        $dir = (Input::get('direction') == 'asc') ? 'desc' : 'asc';
+        return route('musicians.index', [
+            'sortBy' => $column,
+            'direction' => $dir
+        ]);
     }
 } //end of class

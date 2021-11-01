@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('dashboard')
 
 @section('content')
 <h1>Musicians</h1>

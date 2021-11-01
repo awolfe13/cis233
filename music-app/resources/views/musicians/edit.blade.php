@@ -1,9 +1,9 @@
-@extends('layout')
+@extends('dashboard')
 
 @section('content')
 
 <div class="column col-3">
-    <h3>Add a New Musician</h3>
+    <h3>Edit Musician</h3>
 
    @include('errors')
 
