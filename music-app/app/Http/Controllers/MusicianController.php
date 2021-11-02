@@ -23,20 +23,16 @@ class MusicianController extends Controller
     {
         $sortBy = $request->query('sortBy');
         $order = $request->query('order');
-        $url = \Request::fullUrl();
+        //$order = 'asc';
         
         
         if ($sortBy && $order) {
             $musicians = \App\Musician::orderBy($sortBy, $order)->paginate(10)->withQueryString();
-            
-            
-        
         } else {
             $musicians = \App\Musician::paginate(10);
-             return view('musicians.index', ['musicians' => $musicians]);
         }
          
-        return view('musicians.index', ['musicians' => $musicians, 'url' => $url]);
+        return view('musicians.index', ['musicians' => $musicians]);
     }
 
     /**
