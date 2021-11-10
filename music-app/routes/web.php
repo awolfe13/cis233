@@ -19,6 +19,8 @@ Route::get('/', function () {
 
 Route::resource('musicians', 'App\Http\Controllers\MusicianController')->middleware('auth');
 
+Route::resource('users', 'App\Http\Controllers\UserController');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
