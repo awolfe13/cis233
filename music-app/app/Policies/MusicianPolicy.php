@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\Musician;
+use App\Musician;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -16,9 +16,11 @@ class MusicianPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
+
+    //Administrators van view any
     public function viewAny(User $user)
     {
-        //
+       return $user->role = "administrator";
     }
 
     /**

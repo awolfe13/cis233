@@ -651,6 +651,9 @@ select {
   padding-right: 2.5rem;
   -webkit-print-color-adjust: exact;
           color-adjust: exact;
+  border-radius: 6px;
+  border: 1px solid #D8DBE0;
+  color: #6b7280;
 }
 
 [multiple] {

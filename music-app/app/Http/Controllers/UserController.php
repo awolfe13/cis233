@@ -52,14 +52,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
 
-        // \App\Models\User::create($this->validateData($request));
-
-         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => ['required']
-        ]);
+        $this->validatedData($request);
 
           $user = \App\Models\User::create([
             'name' => $request->name,
@@ -67,7 +60,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
             'role' => $request->role,
         ]);
-        
+
         return redirect()->route('users.index')->with('success', 'User was created successfully');
     }
 
@@ -91,7 +84,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = \App\Models\User::findOrFail($id);
+        return view('users.edit', ['user' => $user]);
     }
 
     /**
@@ -103,7 +97,15 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validatedData($request);
+        
+        \App\Models\User::findOrFail($id)->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
+        ]);
+        return redirect()->route('users.index')->with('success', 'User was updated successfully');
     }
 
     /**
@@ -114,17 +116,20 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = \App\Models\User::findOrFail($id);
+        $user->delete();
+        
+        return redirect()->route('users.index')->with('success', 'User was deleted');
     }
 
-    // private function validatedData($request) {
-    //     return $request->validate([
-    //        'name' => ['required', 'string', 'max:255'],
-    //         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-    //         'password' => ['required', 'confirmed', Rules\Password::defaults()],
-    //         'role' => ['required', '']
-    //     ]);
-    // }
+    private function validatedData($request) {
+        return  $request->validate([
+            'name' => 'required|alpha',
+            'email' => 'required|email|max:255|unique:users',
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => 'required',
+        ]);
+        }
 
     public function boot() {
         Paginator::useBootstrap();
