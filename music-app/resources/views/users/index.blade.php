@@ -7,10 +7,10 @@
 <table class="table table-striped table-hover">
     <thead>
         <tr>
-            <th><a href="{{route('users.index', ['sortBy' => 'first_name', 'order' => 'asc'])}}">Name
+            <th><a href="{{route('users.index', ['sortBy' => 'name', 'order' => 'asc'])}}">Name
             </th>
             <th>Email</th>
-            <th><a href="{{route('users.index', ['sortBy' => 'instrument', 'order' => 'asc'])}}">Role</a></th>
+            <th><a href="{{route('users.index', ['sortBy' => 'role', 'order' => 'asc'])}}">Role</a></th>
             <th>Details</th>
             <th>Edit</th>
             <th>Delete</th>

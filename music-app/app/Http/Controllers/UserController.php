@@ -3,8 +3,14 @@
 namespace App\Http\Controllers;
 
 
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
 
 class UserController extends Controller
 {
@@ -13,9 +19,16 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = \App\User::paginate(10);
+        $sortBy = $request->query('sortBy');
+        $order = $request->query('order');
+        
+        if ($sortBy && $order) {
+            $users = \App\Models\User::orderBy($sortBy, $order)->paginate(10)->withQueryString();
+        } else {
+            $users = \App\Models\User::paginate(10);
+        }
         return view('users.index', ['users' => $users]);
     }
 
@@ -26,7 +39,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $user = new \App\Models\User;
+        return view('users.create', ['user' => $user]);
     }
 
     /**
@@ -37,7 +51,24 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        // \App\Models\User::create($this->validateData($request));
+
+         $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => ['required']
+        ]);
+
+          $user = \App\Models\User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
+        ]);
+        
+        return redirect()->route('users.index')->with('success', 'User was created successfully');
     }
 
     /**
@@ -48,7 +79,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = \App\Models\User::findOrFail($id);
+        return view('users.show', ['user' => $user] );
     }
 
     /**
@@ -83,5 +115,18 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    // private function validatedData($request) {
+    //     return $request->validate([
+    //        'name' => ['required', 'string', 'max:255'],
+    //         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+    //         'password' => ['required', 'confirmed', Rules\Password::defaults()],
+    //         'role' => ['required', '']
+    //     ]);
+    // }
+
+    public function boot() {
+        Paginator::useBootstrap();
     }
 }
