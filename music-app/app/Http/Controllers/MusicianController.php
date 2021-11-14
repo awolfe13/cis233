@@ -40,8 +40,11 @@ class MusicianController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        if($request->user()->cannot('create', Musician::class)){
+            return redirect()->route('musicians.index')->with('error', 'You do no have permission');
+        }
         $musician = new \App\Musician;
         return view('musicians.create', ['musician' => $musician]);
     }
@@ -76,8 +79,11 @@ class MusicianController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, Request $request)
     {
+        if($request->user()->cannot('viewAny', Musician::class)){
+            return redirect()->route('musicians.index')->with('error', 'You do no have permission');
+        }
         $musician = \App\Musician::findOrFail($id);
         return view('musicians.edit', ['musician'=> $musician]);
     }

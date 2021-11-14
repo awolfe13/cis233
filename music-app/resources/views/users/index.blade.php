@@ -3,6 +3,7 @@
 @section('content')
 
 <h1>Users</h1>
+@can('viewAny', App\Models\User::class)
 <a class="btn btn-primary" href="{{ route('users.create')}}">New User</a>
 <table class="table table-striped table-hover">
     <thead>
@@ -38,5 +39,7 @@
     </tbody>
 </table>
 {{$users->links('pagination::bootstrap-4')}}
+
+@endcan
 
 @endsection

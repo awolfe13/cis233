@@ -14,6 +14,11 @@
                         {{session()->get('success')}}
                     </div>
                     @endif
+                    @if(session()->get('error'))
+                    <div class="toast toast-danger">
+                        {{session()->get('error')}}
+                    </div>
+                    @endif
                     @yield('content')
                 </div>
             </div>

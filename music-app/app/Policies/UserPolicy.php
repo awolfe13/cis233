@@ -2,11 +2,10 @@
 
 namespace App\Policies;
 
-use App\Musician;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class MusicianPolicy
+class UserPolicy
 {
     use HandlesAuthorization;
 
@@ -16,24 +15,21 @@ class MusicianPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-
-    //Administrators van view any
     public function viewAny(User $user)
     {
-       return $user->role == "coordinator" || $user->role == "administrator";
+        return $user->role == "administrator";
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Musician  $musician
+     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Musician $musician)
+    public function view(User $user, User $model)
     {
-    //    return $user->role == "administrator" || $user->role == "coordinator" || $user->role == "viewer";
-    // what is the musician id to match the user id?
+        
     }
 
     /**
@@ -44,17 +40,17 @@ class MusicianPolicy
      */
     public function create(User $user)
     {
-        return $user->role == "coordinator" || $user->role == "administrator";
+        //
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Musician  $musician
+     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Musician $musician)
+    public function update(User $user, User $model)
     {
         //
     }
@@ -63,10 +59,10 @@ class MusicianPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Musician  $musician
+     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Musician $musician)
+    public function delete(User $user, User $model)
     {
         //
     }
@@ -75,10 +71,10 @@ class MusicianPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Musician  $musician
+     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Musician $musician)
+    public function restore(User $user, User $model)
     {
         //
     }
@@ -87,10 +83,10 @@ class MusicianPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Musician  $musician
+     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Musician $musician)
+    public function forceDelete(User $user, User $model)
     {
         //
     }

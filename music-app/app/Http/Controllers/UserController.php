@@ -21,6 +21,9 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        if($request->user()->cannot('viewAny', User::class)){
+            return redirect()->route('musicians.index')->with('error', 'You do no have permission');
+        }
         $sortBy = $request->query('sortBy');
         $order = $request->query('order');
         
@@ -37,8 +40,11 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        if($request->user()->cannot('viewAny', User::class)){
+            return redirect()->route('musicians.index')->with('error', 'You do no have permission');
+        }
         $user = new \App\Models\User;
         return view('users.create', ['user' => $user]);
     }
@@ -82,8 +88,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, Request $request)
     {
+        if($request->user()->cannot('viewAny', User::class)){
+            return redirect()->route('musicians.index')->with('error', 'You do no have permission');
+        }
         $user = \App\Models\User::findOrFail($id);
         return view('users.edit', ['user' => $user]);
     }

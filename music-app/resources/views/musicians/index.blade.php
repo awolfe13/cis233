@@ -2,7 +2,9 @@
 
 @section('content')
 <h1>Musicians</h1>
+@can('create', App\Musician::class)
 <a class="btn btn-primary" href="{{ route('musicians.create')}}">New Musician</a>
+@endcan
 <table class="table table-striped table-hover">
     <thead>
         <tr>
@@ -13,8 +15,10 @@
             <th><a href="{{route('musicians.index', ['sortBy' => 'instrument', 'order' => 'asc'])}}">Instrument</a></th>
             <th>Website</th>
             <th>Details</th>
+            @can('viewAny', App\Musician::class)
             <th>Edit</th>
             <th>Delete</th>
+            @endcan
         </tr>
     </thead>
     <tbody>
@@ -25,6 +29,7 @@
             <td>{{$musician->instrument}}</td>
             <td>{{$musician->website}}</td>
             <td><a href="{{ route('musicians.show', $musician->id)}}">Show Detail</td>
+            @can('viewAny', App\Musician::class)    
             <td><a href="{{ route('musicians.edit', $musician->id)}}">Edit</td>
             <td>
                 <form action="{{route('musicians.destroy', $musician->id)}}" method="POST"
@@ -34,6 +39,7 @@
                     <button class="btn btn-error" type="submit">Delete</button>
                 </form>
             </td>
+            @endcan
         </tr>
         @endforeach
     </tbody>
