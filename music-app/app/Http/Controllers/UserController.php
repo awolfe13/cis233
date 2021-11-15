@@ -58,8 +58,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $id = -1;
-        $this->validatedData($request, $id);
+        
+        $this->validatedData($request);
 
           $user = \App\Models\User::create([
             'name' => $request->name,
@@ -132,7 +132,7 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User was deleted');
     }
 
-    private function validatedData($request, $id) {
+    private function validatedData($request, $id = -1) {
         return  $request->validate([
             'name' => 'required|alpha',
             'email' => ['required', 'email','max:255', Rule::unique('users')->ignore($id)],
