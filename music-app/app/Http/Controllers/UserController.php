@@ -11,6 +11,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -57,8 +58,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-
-        $this->validatedData($request);
+        $id = -1;
+        $this->validatedData($request, $id);
 
           $user = \App\Models\User::create([
             'name' => $request->name,
@@ -88,7 +89,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id, Request $request)
+    public function edit(Request $request, $id)
     {
         if($request->user()->cannot('viewAny', User::class)){
             return redirect()->route('musicians.index')->with('error', 'You do no have permission');
@@ -106,7 +107,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validatedData($request);
+        $this->validatedData($request, $id);
         
         \App\Models\User::findOrFail($id)->update([
             'name' => $request->name,
@@ -131,10 +132,10 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User was deleted');
     }
 
-    private function validatedData($request) {
+    private function validatedData($request, $id) {
         return  $request->validate([
             'name' => 'required|alpha',
-            'email' => 'required|email|max:255|unique:users',
+            'email' => ['required', 'email','max:255', Rule::unique('users')->ignore($id)],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => 'required',
         ]);
