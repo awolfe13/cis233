@@ -17,9 +17,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('musicians', 'App\Http\Controllers\MusicianController')->middleware('auth');
+//Route::resource('musicians', 'App\Http\Controllers\MusicianController')->middleware('auth');
 
-Route::resource('users', 'App\Http\Controllers\UserController')->middleware('auth');
+//Route::resource('users', 'App\Http\Controllers\UserController')->middleware('auth');
+
+Route::get('/', App\Http\Livewire\Musicians::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
