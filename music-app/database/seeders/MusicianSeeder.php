@@ -17,7 +17,7 @@ class MusicianSeeder extends Seeder
 
         $faker = \Faker\Factory::create();
         
-        foreach(range(1,30) as $number) {
+        foreach(range(1,100) as $number) {
             \App\Musician::create([
                 'first_name' => $faker->firstName,
                 'last_name' => $faker->lastName,
