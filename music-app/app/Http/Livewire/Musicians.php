@@ -28,15 +28,16 @@ class Musicians extends Component
         $this->direction = $dir;
     }
 
-    public function render()
-    {
+
+    public function render() {
         $musicians = \App\Musician::where('first_name', 'like', '%'.$this->search.'%')
                                     ->orWhere('last_name', 'like', '%'.$this->search.'%')
                                     ->orWhere('instrument','like', '%'.$this->search.'%')
                                     ->orderBy($this->sortBy, $this->direction)
                                     ->paginate($this->numOfMusicians);
+        $allMusicians = \App\Musician::count();
                                     
                                      
-        return view('livewire.musicians', ['musicians' => $musicians]);
+        return view('livewire.musicians', ['musicians' => $musicians, 'allMusicians' => $allMusicians]);
     }
 }
